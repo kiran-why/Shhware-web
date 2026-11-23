@@ -24,7 +24,7 @@
 <main>
 <article>
 <h1>Компоненты</h1>
-<p>Части системы, которые вы выбираете в <a href="shh.html#config">shh config</a>, на трёх вкладках: settings, features, misc. Списки: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/artix_components.txt"><code>components/artix_components.txt</code></a> и <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/void_components.txt"><code>components/void_components.txt</code></a>. Всё остальное ставится всегда.</p>
+<p>Части системы, которые вы выбираете в <a href="shh.html#config">shh config</a>: settings, features, misc. На KISS есть ещё вкладка <a href="#recipes">recipes</a>. Списки: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/artix_components.txt">Artix</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/void_components.txt">Void</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/kiss_components.txt">KISS</a>.</p>
 <p>Файлы ниже: путь в репозитории → куда его кладёт установка.</p>
 <p>Выключили часть? Следующий <a href="shh.html#update">shh update</a> удалит её файлы (кроме тех, что вы меняли), остановит её сервис и спросит, удалить ли её пакеты.</p>
 <details class="section">
@@ -35,14 +35,14 @@
 <li><code>layouts</code>: раскладки клавиатуры, первая — основная. По умолчанию: us,ru.</li>
 <li><code>switch layout</code>: клавиши переключения раскладки: Alt+Shift (по умолчанию), Ctrl+Shift, Super+Space, Caps Lock, левый Alt+левый Shift.</li>
 <li><code>dns</code>: DHCP (по умолчанию), Cloudflare, Quad9, Google.<br>Любой другой: вручную в <code>~/.config/shh/config</code>.</li>
-<li><code>graphics</code>: auto (по умолчанию) или вручную: AMD, Intel, NVIDIA, Nouveau.<br>auto: драйверы для видеокарт, которые находит <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a>.<br>NVIDIA и Nouveau вместе выбрать нельзя.</li>
+<li><code>graphics</code>: auto (по умолчанию) или вручную: AMD, Intel, NVIDIA, Nouveau.<br>auto: драйверы для GPU, которые находит <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a>.<br>NVIDIA и Nouveau вместе выбрать нельзя.</li>
 <li><code>editor</code>: Vim (по умолчанию) или Neovim.<br>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/vim">config/vim</a> → <code>~/.config/vim</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/nvim">config/nvim</a> → <code>~/.config/nvim</code></li>
 <li><code>file manager</code>: Broot (по умолчанию) или Yazi, открывается на Super+F.<br>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/broot">config/broot</a> → <code>~/.config/broot</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/broot">config/sway/features/broot</a> → <code>~/.config/sway/features/broot</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/yazi">config/yazi</a> → <code>~/.config/yazi</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/yazi">config/sway/features/yazi</a> → <code>~/.config/sway/features/yazi</code></li>
 <li><code>aur helper</code>, только Artix: yay (по умолчанию) или paru.</li>
 <li><code>pacman</code>, только Artix: цвета, параллельные загрузки, сборка из AUR на всех ядрах. По умолчанию вкл.</li>
 <li><code>nobeep</code>: выключает пищалку материнской платы. По умолчанию вкл.</li>
 <li><code>maxhz</code>: каждый экран на максимальной частоте обновления, и экран, подключённый позже. По умолчанию вкл.<br>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/maxhz">scripts/maxhz</a> → <code>~/.local/bin/maxhz</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/maxhz">config/sway/features/maxhz</a> → <code>~/.config/sway/features/maxhz</code></li>
-<li><code>xwayland</code>: программы для X11, после перезахода. По умолчанию выкл.<br>Выкл.: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>Вкл.: на Artix ставится xorg-xwayland; на Void он стоит всегда, он нужен sway.</li>
+<li><code>xwayland</code>: программы для X11, после перезахода. По умолчанию выкл.<br>Выкл.: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>Вкл.: на Artix ставится xorg-xwayland; на Void он стоит всегда, он нужен sway. На KISS переключатель ничего не меняет: wlroots и sway собраны без Xwayland.</li>
 <li><code>a11y</code>: скринридеры в программах GTK, после перезахода. По умолчанию выкл.</li>
 </ul>
 </details>
@@ -50,7 +50,7 @@
 <summary><h2 id="features">Features</h2></summary>
 <p>Скрипты и настройки sway, которые упрощают работу с системой. По умолчанию все включены. Строки sway каждой фичи лежат в её собственном файле в <code>config/sway/features/</code>.</p>
 <h3 id="fastfetch"><code>fastfetch</code></h3>
-<p>Информация о системе в каждом новом окне foot: слева наше лого, справа рамка с ОС, ядром, CPU, GPU, RAM, диском и другим.</p>
+<p>Информация о системе в каждом новом окне foot: слева наше лого, справа — OS, kernel, CPU, GPU, RAM и диск.</p>
 <p>Чтобы поменять лого: положите свой файл в <code>~/.config/fastfetch/logos/</code> и впишите путь к нему в <code>"source"</code> в <code>~/.config/fastfetch/config.jsonc</code>. Без <code>$</code> в лого: fastfetch читает <code>$1</code>…<code>$9</code> как цвета. В режиме copy следующий shh update вернёт исходный <code>config.jsonc</code>, ваш останется рядом как <code>config.jsonc.bak-ДАТА</code>.</p>
 <ul class="spaced">
 <li>Файлы: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/fastfetch">config/fastfetch</a> → <code>~/.config/fastfetch</code></li>
@@ -92,7 +92,7 @@
 <p>Bluetooth и его меню: Bluez в меню панели (<a href="environment.html">Окружение</a>). Включить / выключить, подключить новое устройство, подключиться, отключиться, забыть устройство. Запроса PIN нет: клавиатуру, которая просит PIN, подключайте в <code>bluetoothctl</code>. Нет адаптера — меню так и скажет.</p>
 <ul class="spaced">
 <li>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/bluetooth">scripts/bluetooth</a> → <code>~/.local/bin/bluetooth</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/bluetooth">config/sway/features/bluetooth</a> → <code>~/.config/sway/features/bluetooth</code></li>
-<li>Пакеты:<br>Artix: bluez, bluez-utils, bluez-s6<br>Void: bluez, libspa-bluetooth</li>
+<li>Пакеты:<br>Artix: bluez, bluez-utils, bluez-s6<br>Void: bluez, libspa-bluetooth<br>KISS: bluez</li>
 <li>Сервис: bluetoothd</li>
 </ul>
 <h3 id="scratchpad"><code>scratchpad</code></h3>
@@ -103,7 +103,7 @@
 <li>Пакет: своего нет</li>
 </ul>
 <h3 id="screenshare"><code>screenshare</code></h3>
-<p>Показ экрана в браузере.</p>
+<p>Показ экрана в браузере. На KISS этой функции нет: Firefox собран без D-Bus, поэтому portal не может с ним связаться.</p>
 <ul class="spaced">
 <li>Файлы: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/screenshare">config/sway/features/screenshare</a> → <code>~/.config/sway/features/screenshare</code></li>
 <li>Пакет: xdg-desktop-portal-wlr</li>
@@ -114,7 +114,7 @@
 <li>Меню:<br>On/off: включить / выключить<br>Locations: выбрать сервер<br>Add subscription: вставьте ссылку. Она хранится в <code>/etc/sing-box/subscription</code>, читать её может только root. Потом удалите ссылку из <a href="#clipboard">истории буфера</a> (Super+C)<br>Update subscription: обновить подписку<br>Start at boot: запуск при загрузке, вкл. / выкл.</li>
 <li>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/vpn">scripts/vpn</a> → <code>~/.local/bin/vpn</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/vpn">config/sway/features/vpn</a> → <code>~/.config/sway/features/vpn</code></li>
 <li>Пакет: sing-box</li>
-<li>Сервис:<br>Artix: sing-box<br>Void: shh-vpn</li>
+<li>Сервис:<br>Artix: sing-box<br>Void, KISS: shh-vpn</li>
 </ul>
 </details>
 <details class="section">
@@ -122,21 +122,26 @@
 <p>Дополнительные программы. По умолчанию все включены, ненужное можно выключить.</p>
 <table class="pkgs">
 <thead>
-<tr><th>Имя</th><th>Что это</th><th>Artix</th><th>Void</th></tr>
+<tr><th>Имя</th><th>Что это</th><th>Artix</th><th>Void</th><th>KISS</th></tr>
 </thead>
 <tbody>
-<tr><td><code>firefox</code></td><td>браузер</td><td>firefox</td><td>firefox</td></tr>
-<tr><td><code>mpv</code></td><td>видеоплеер</td><td>mpv</td><td>mpv</td></tr>
-<tr><td><code>imv</code></td><td>просмотр картинок</td><td>imv</td><td>imv</td></tr>
-<tr><td><code>btop</code></td><td>системный монитор</td><td>btop</td><td>btop</td></tr>
-<tr><td><code>7zip</code></td><td>архивы</td><td>7zip</td><td>7zip</td></tr>
-<tr><td><code>man</code></td><td>справочные страницы</td><td>man-db, man-pages</td><td>man-pages-devel</td></tr>
-<tr><td><code>mako</code></td><td>уведомления; когда выключен, их нет совсем</td><td>mako, libnotify</td><td>mako, libnotify</td></tr>
-<tr><td><code>emoji</code></td><td>шрифт эмодзи</td><td>noto-fonts-emoji</td><td>noto-fonts-emoji</td></tr>
-<tr><td><code>noto</code></td><td>шрифт текста</td><td>noto-fonts</td><td>noto-fonts-ttf</td></tr>
+<tr><td><code>firefox</code></td><td>браузер</td><td>firefox</td><td>firefox</td><td>firefox</td></tr>
+<tr><td><code>mpv</code></td><td>видеоплеер</td><td>mpv</td><td>mpv</td><td>mpv</td></tr>
+<tr><td><code>imv</code></td><td>просмотр картинок</td><td>imv</td><td>imv</td><td>imv</td></tr>
+<tr><td><code>btop</code></td><td>системный монитор</td><td>btop</td><td>btop</td><td>btop</td></tr>
+<tr><td><code>7zip</code></td><td>архивы</td><td>7zip</td><td>7zip</td><td>7zip</td></tr>
+<tr><td><code>man</code></td><td>справочные страницы</td><td>man-db, man-pages</td><td>man-pages-devel</td><td>mandoc, man-pages</td></tr>
+<tr><td><code>mako</code></td><td>уведомления; когда выключен, их нет совсем</td><td>mako, libnotify</td><td>mako, libnotify</td><td>mako, libnotify</td></tr>
+<tr><td><code>emoji</code></td><td>шрифт эмодзи</td><td>noto-fonts-emoji</td><td>noto-fonts-emoji</td><td>noto-fonts-emoji</td></tr>
+<tr><td><code>noto</code></td><td>шрифт текста</td><td>noto-fonts</td><td>noto-fonts-ttf</td><td>noto-fonts</td></tr>
 </tbody>
 </table>
-<p>Чего нет в списке: <code>sudo pacman -S NAME</code> (Artix) или <code>sudo xbps-install NAME</code> (Void).</p>
+<p>Чего нет в списке: <code>sudo pacman -S NAME</code> (Artix), <code>sudo xbps-install NAME</code> (Void), <code>kiss b NAME &amp;&amp; kiss i NAME</code> (KISS).</p>
+</details>
+<details class="section">
+<summary><h2 id="recipes">KISS recipes</h2></summary>
+<p>Только на KISS. Если выключить <code>bash</code>, установщик пропустит этот пакет.</p>
+<p><code>All recipes</code> показывает рецепты из <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/repo">system/kiss/repo</a> и их версии. Enter выключает или включает рецепт. Выкл.: при следующей сборке KISS возьмёт рецепт сообщества, если он есть. Уже установленный пакет не меняется.</p>
 </details>
 </article>
 </main>

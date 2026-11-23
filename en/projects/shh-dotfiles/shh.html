@@ -36,6 +36,8 @@
 <p>Parts of the environment you can turn off: <a href="components.html#features">Components: features</a>.</p>
 <h3>misc: additional packages</h3>
 <p>Extra programs: <a href="components.html#misc">Components: misc</a>.</p>
+<h3>recipes: KISS only</h3>
+<p>Choose which recipes to build from: <a href="components.html#recipes">Components: KISS recipes</a>.</p>
 <h3>The config file</h3>
 <p>The choices live in <code>~/.config/shh/config</code>, one <code>NAME=VALUE</code> per line; you can edit it by hand. A missing line = the default. The file is not in the repo, so shh update keeps your choices.</p>
 </details>
@@ -53,13 +55,13 @@
 <pre><code>shh doctor</code></pre>
 <p>Checks that everything the install set up is in place and says what is missing, mostly with the fix (<code>sh install.sh</code> or <code>sh lib/link.sh</code>). It follows your choices in <a href="#config">shh config</a>: a part turned off is not looked for. At the end: the number of problems, or "all good".</p>
 <h3>services</h3>
-<p>Every service from <code>services.txt</code> is running (s6 on Artix, runit on Void).</p>
+<p>Checks the services in <code>services.txt</code> (s6 on Artix, runit on Void and KISS). If a KISS service is down, check its <a href="known-issues.html#kiss">runit log</a>.</p>
 <h3>files</h3>
 <p>Every file <a href="layout.html#link-sh">lib/link.sh</a> put in place (the list: <code>~/.local/state/shh/installed</code>) is still there; a broken link counts as missing.</p>
 <h3>packages</h3>
 <p>Every package from <code>common.csv</code> and from the graphics driver lists (by the card, or as picked in settings: graphics) is installed.</p>
 <h3>session</h3>
-<p>What sway needs without elogind: <code>XDG_RUNTIME_DIR</code> is set, and you are in the groups seat, audio, video (Void: _seatd, audio, video). Just added to a group: log out and in again.</p>
+<p>Checks <code>XDG_RUNTIME_DIR</code> and your groups: seat, audio, video on Artix; _seatd, audio, video on Void; audio, video, wheel on KISS. Just added to a group: log out and in again.</p>
 </details>
 <details class="section">
 <summary><h2 id="uninstall">shh uninstall</h2></summary>

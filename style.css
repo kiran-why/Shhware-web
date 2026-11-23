@@ -469,6 +469,10 @@ footer .stickman:hover {
     content: "Void: ";
   }
 
+  main table.pkgs td:nth-child(5)::before {
+    content: "KISS: ";
+  }
+
   main table.init td:nth-child(2)::before {
     content: "Init: ";
   }

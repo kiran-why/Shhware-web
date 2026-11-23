@@ -24,7 +24,7 @@
 <main>
 <article>
 <h1>Components</h1>
-<p>The parts of the system you choose in <a href="shh.html#config">shh config</a>, in three tabs: settings, features, misc. The lists: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/artix_components.txt"><code>components/artix_components.txt</code></a> and <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/void_components.txt"><code>components/void_components.txt</code></a>. Everything else is always installed.</p>
+<p>The parts of the system you choose in <a href="shh.html#config">shh config</a>: settings, features, misc. KISS also has a <a href="#recipes">recipes</a> tab. The lists: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/artix_components.txt">Artix</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/void_components.txt">Void</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/components/kiss_components.txt">KISS</a>.</p>
 <p>Files below: path in the repo → where the install puts it.</p>
 <p>Turned a part off? The next <a href="shh.html#update">shh update</a> removes its files (except the ones you changed), stops its service and asks whether to remove its packages.</p>
 <details class="section">
@@ -42,7 +42,7 @@
 <li><code>pacman</code>, Artix only: colors, parallel downloads, AUR builds on all CPU cores. On by default.</li>
 <li><code>nobeep</code>: mutes the motherboard beeper. On by default.</li>
 <li><code>maxhz</code>: every screen at its highest refresh rate, also one plugged in later. On by default.<br>Files:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/maxhz">scripts/maxhz</a> → <code>~/.local/bin/maxhz</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/maxhz">config/sway/features/maxhz</a> → <code>~/.config/sway/features/maxhz</code></li>
-<li><code>xwayland</code>: X11 programs, after a relogin. Off by default.<br>Off: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>On: Artix installs xorg-xwayland; on Void it is always installed, sway needs it.</li>
+<li><code>xwayland</code>: X11 programs, after a relogin. Off by default.<br>Off: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>On: Artix installs xorg-xwayland; on Void it is always installed, sway needs it. On KISS the switch has no effect: wlroots and sway are built without Xwayland.</li>
 <li><code>a11y</code>: screen readers in GTK programs, after a relogin. Off by default.</li>
 </ul>
 </details>
@@ -92,7 +92,7 @@
 <p>Bluetooth and its menu: Bluez in the bar menu (<a href="environment.html">Environment</a>). Turn it on / off, pair, connect, disconnect, forget a device. No PIN prompt: pair a keyboard that asks for a PIN in <code>bluetoothctl</code>. No adapter: the menu says so.</p>
 <ul class="spaced">
 <li>Files:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/bluetooth">scripts/bluetooth</a> → <code>~/.local/bin/bluetooth</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/bluetooth">config/sway/features/bluetooth</a> → <code>~/.config/sway/features/bluetooth</code></li>
-<li>Packages:<br>Artix: bluez, bluez-utils, bluez-s6<br>Void: bluez, libspa-bluetooth</li>
+<li>Packages:<br>Artix: bluez, bluez-utils, bluez-s6<br>Void: bluez, libspa-bluetooth<br>KISS: bluez</li>
 <li>Service: bluetoothd</li>
 </ul>
 <h3 id="scratchpad"><code>scratchpad</code></h3>
@@ -103,7 +103,7 @@
 <li>Package: none of its own</li>
 </ul>
 <h3 id="screenshare"><code>screenshare</code></h3>
-<p>Screen sharing in the browser.</p>
+<p>Screen sharing in the browser. Not available on KISS: Firefox is built without D-Bus, so the portal can't reach it.</p>
 <ul class="spaced">
 <li>Files: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/screenshare">config/sway/features/screenshare</a> → <code>~/.config/sway/features/screenshare</code></li>
 <li>Package: xdg-desktop-portal-wlr</li>
@@ -114,7 +114,7 @@
 <li>Menu:<br>On/off<br>Locations: pick a server<br>Add subscription: paste the link. It is kept in <code>/etc/sing-box/subscription</code>, readable by root only. Then delete the link from the <a href="#clipboard">clipboard history</a> (Super+C)<br>Update subscription<br>Start at boot: on / off</li>
 <li>Files:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/vpn">scripts/vpn</a> → <code>~/.local/bin/vpn</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/vpn">config/sway/features/vpn</a> → <code>~/.config/sway/features/vpn</code></li>
 <li>Package: sing-box</li>
-<li>Service:<br>Artix: sing-box<br>Void: shh-vpn</li>
+<li>Service:<br>Artix: sing-box<br>Void, KISS: shh-vpn</li>
 </ul>
 </details>
 <details class="section">
@@ -122,21 +122,26 @@
 <p>Extra programs. All on by default, turn off what you don't need.</p>
 <table class="pkgs">
 <thead>
-<tr><th>Name</th><th>What</th><th>Artix</th><th>Void</th></tr>
+<tr><th>Name</th><th>What</th><th>Artix</th><th>Void</th><th>KISS</th></tr>
 </thead>
 <tbody>
-<tr><td><code>firefox</code></td><td>browser</td><td>firefox</td><td>firefox</td></tr>
-<tr><td><code>mpv</code></td><td>video player</td><td>mpv</td><td>mpv</td></tr>
-<tr><td><code>imv</code></td><td>image viewer</td><td>imv</td><td>imv</td></tr>
-<tr><td><code>btop</code></td><td>system monitor</td><td>btop</td><td>btop</td></tr>
-<tr><td><code>7zip</code></td><td>archives</td><td>7zip</td><td>7zip</td></tr>
-<tr><td><code>man</code></td><td>manual pages</td><td>man-db, man-pages</td><td>man-pages-devel</td></tr>
-<tr><td><code>mako</code></td><td>notifications; when off, none at all</td><td>mako, libnotify</td><td>mako, libnotify</td></tr>
-<tr><td><code>emoji</code></td><td>emoji font</td><td>noto-fonts-emoji</td><td>noto-fonts-emoji</td></tr>
-<tr><td><code>noto</code></td><td>text font</td><td>noto-fonts</td><td>noto-fonts-ttf</td></tr>
+<tr><td><code>firefox</code></td><td>browser</td><td>firefox</td><td>firefox</td><td>firefox</td></tr>
+<tr><td><code>mpv</code></td><td>video player</td><td>mpv</td><td>mpv</td><td>mpv</td></tr>
+<tr><td><code>imv</code></td><td>image viewer</td><td>imv</td><td>imv</td><td>imv</td></tr>
+<tr><td><code>btop</code></td><td>system monitor</td><td>btop</td><td>btop</td><td>btop</td></tr>
+<tr><td><code>7zip</code></td><td>archives</td><td>7zip</td><td>7zip</td><td>7zip</td></tr>
+<tr><td><code>man</code></td><td>manual pages</td><td>man-db, man-pages</td><td>man-pages-devel</td><td>mandoc, man-pages</td></tr>
+<tr><td><code>mako</code></td><td>notifications; when off, none at all</td><td>mako, libnotify</td><td>mako, libnotify</td><td>mako, libnotify</td></tr>
+<tr><td><code>emoji</code></td><td>emoji font</td><td>noto-fonts-emoji</td><td>noto-fonts-emoji</td><td>noto-fonts-emoji</td></tr>
+<tr><td><code>noto</code></td><td>text font</td><td>noto-fonts</td><td>noto-fonts-ttf</td><td>noto-fonts</td></tr>
 </tbody>
 </table>
-<p>Anything not on the list: <code>sudo pacman -S NAME</code> (Artix) or <code>sudo xbps-install NAME</code> (Void).</p>
+<p>Anything not on the list: <code>sudo pacman -S NAME</code> (Artix), <code>sudo xbps-install NAME</code> (Void), <code>kiss b NAME &amp;&amp; kiss i NAME</code> (KISS).</p>
+</details>
+<details class="section">
+<summary><h2 id="recipes">KISS recipes</h2></summary>
+<p>Only on KISS. Turn off <code>bash</code> here to skip the package at install time.</p>
+<p><code>All recipes</code> lists the recipes from <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/repo">system/kiss/repo</a> with their versions. Enter turns a recipe off or on. Off: the next build uses the community recipe if there is one. The installed package stays as it is.</p>
 </details>
 </article>
 </main>

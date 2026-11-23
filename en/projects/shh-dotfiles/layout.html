@@ -62,16 +62,17 @@
 </details>
 <details class="section">
 <summary><h2 id="components"><code>components/</code></h2></summary>
-<p><code>artix_components.txt</code>, <code>void_components.txt</code>: the parts <a href="shh.html#config">shh config</a> can turn off, one per line: name, packages, files, services, tab, default. The list: <a href="components.html">Components</a>.</p>
+<p><code>artix_components.txt</code>, <code>void_components.txt</code>, <code>kiss_components.txt</code>: the parts <a href="shh.html#config">shh config</a> can turn off, one per line: name, packages, files, services, tab, default. The list: <a href="components.html">Components</a>.</p>
 </details>
 <details class="section">
 <summary><h2 id="system"><code>system/</code></h2></summary>
-<p>One folder per distro: <code>artix/</code>, <code>void/</code>. In each:</p>
+<p>One folder per distro: <code>artix/</code>, <code>void/</code>, <code>kiss/</code>. In each:</p>
 <ul class="spaced">
 <li><code>distro.sh</code>: what only this distro does: the package manager, the services, the login. Every distro has the same functions;</li>
 <li><code>services.txt</code>: the services started at boot;</li>
-<li><code>packages/</code>: <code>common.csv</code>, the packages for everyone, and one list per graphics driver.<br>Artix: amd, intel, nvidia, nvidia-580xx.<br>Void: amd, intel.</li>
+<li><code>packages/</code>: <code>common.csv</code> holds the packages for every machine. Artix and Void also have driver lists.<br>Artix: amd, intel, nvidia, nvidia-580xx.<br>Void: amd, intel.</li>
 </ul>
+<p>KISS also has <code>system/kiss/repo/</code>: the package recipes listed in <a href="components.html#recipes">KISS recipes</a>.</p>
 </details>
 <details class="section">
 <summary><h2 id="config"><code>config/</code></h2></summary>

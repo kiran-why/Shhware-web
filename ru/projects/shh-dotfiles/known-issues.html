@@ -25,9 +25,14 @@
 <article>
 <h1>Известные проблемы</h1>
 <details class="section">
+<summary><h2 id="sway">Лог падения sway</h2></summary>
+<p>Если sway завершился с ошибкой, на tty1 появятся последние пять строк лога. Полный лог последнего падения сохраняется и после следующего входа:</p>
+<pre><code>less ~/.local/state/shh/wm-crash.log</code></pre>
+</details>
+<details class="section">
 <summary><h2 id="nvidia">NVIDIA</h2></summary>
 <ul class="spaced">
-<li>На картах NVIDIA не проверялось. GTX 6xx / 7xx и более старые работают на nouveau.</li>
+<li>На GPU NVIDIA не проверялось. GTX 6xx / 7xx и более старые работают на nouveau.</li>
 <li>Чёрный экран после загрузки: уберите <code>kms</code> из <code>HOOKS</code> в <code>/etc/mkinitcpio.conf</code>, затем:
 <pre><code>sudo mkinitcpio -P</code></pre></li>
 </ul>
@@ -35,9 +40,18 @@
 <details class="section">
 <summary><h2 id="void">Void Linux</h2></summary>
 <ul class="spaced">
-<li>На musl нет драйвера NVIDIA: карты NVIDIA работают только на nouveau.</li>
+<li>На musl нет проприетарного драйвера NVIDIA: для этих GPU используется nouveau.</li>
 <li><code>wpa_supplicant</code> спорит с <code>iwd</code> за wifi. Выключите его:
 <pre><code>sudo rm /var/service/wpa_supplicant</code></pre></li>
+</ul>
+</details>
+<details class="section">
+<summary><h2 id="kiss">KISS Linux Community</h2></summary>
+<ul class="spaced">
+<li>В штатной сборке sway нет system tray и <a href="components.html#settings">Xwayland</a>.</li>
+<li>Firefox собран без D-Bus: <a href="components.html#screenshare">показ экрана в браузере</a> недоступен.</li>
+<li>Сервисы runit, которые настраивает установщик, пишут лог в <code>/var/log/NAME/current</code>. Например, если sway не может подключиться к seatd:
+<pre><code>sudo tail /var/log/seatd/current</code></pre></li>
 </ul>
 </details>
 </article>

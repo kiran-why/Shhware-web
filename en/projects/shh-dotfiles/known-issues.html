@@ -25,6 +25,11 @@
 <article>
 <h1>Known issues</h1>
 <details class="section">
+<summary><h2 id="sway">sway crash log</h2></summary>
+<p>If sway exits with an error, tty1 shows the last five lines of its log. The full log of the last failed session stays here, even after you log in again:</p>
+<pre><code>less ~/.local/state/shh/wm-crash.log</code></pre>
+</details>
+<details class="section">
 <summary><h2 id="nvidia">NVIDIA</h2></summary>
 <ul class="spaced">
 <li>Not tested on NVIDIA cards. GTX 6xx / 7xx and older run on nouveau.</li>
@@ -38,6 +43,15 @@
 <li>No NVIDIA driver on musl: NVIDIA cards run on nouveau only.</li>
 <li><code>wpa_supplicant</code> fights <code>iwd</code> over wifi. Turn it off:
 <pre><code>sudo rm /var/service/wpa_supplicant</code></pre></li>
+</ul>
+</details>
+<details class="section">
+<summary><h2 id="kiss">KISS Linux Community</h2></summary>
+<ul class="spaced">
+<li>The stock sway build has no system tray or <a href="components.html#settings">Xwayland</a>.</li>
+<li>Firefox is built without D-Bus: no <a href="components.html#screenshare">browser screen sharing</a>.</li>
+<li>The runit services set up by the installer log to <code>/var/log/NAME/current</code>. For example, if sway can't reach seatd:
+<pre><code>sudo tail /var/log/seatd/current</code></pre></li>
 </ul>
 </details>
 </article>

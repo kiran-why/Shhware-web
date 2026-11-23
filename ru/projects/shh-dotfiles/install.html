@@ -33,13 +33,13 @@
 <tbody>
 <tr><td>Artix Linux</td><td>s6</td><td><span class="tip" tabindex="0">seatd<span class="tip-text"> (вместо elogind)</span></span></td></tr>
 <tr><td>Void Linux</td><td>runit</td><td><span class="tip" tabindex="0">musl<span class="tip-text"> (библиотека C, вместо glibc)</span></span></td></tr>
+<tr><td>KISS Linux Community</td><td>runit</td><td>Сборка пакетов из исходников</td></tr>
 </tbody>
 </table>
 <h3>Скоро</h3>
 <ul>
 <li>Gentoo</li>
 <li>CRUX</li>
-<li>KISS</li>
 </ul>
 </details>
 <details class="section">
@@ -88,24 +88,37 @@ sh install.sh</code></pre>
 </ol>
 </details>
 <details class="section">
+<summary><h2 id="kiss">Установка на KISS Linux Community</h2></summary>
+<p>Нужна базовая система с runit, git и доступом в интернет. Ваш пользователь должен входить в группу <code>wheel</code> и иметь доступ к <code>sudo</code>. Первая установка может занять несколько часов: KISS собирает пакеты из исходников.</p>
+<ol>
+<li>Склонируйте репозиторий от своего пользователя:
+<pre><code>git clone https://github.com/kiran-why/Shh-dotfiles.git ~/Shh-dotfiles</code></pre></li>
+<li>Установите dotfiles:
+<pre><code>cd ~/Shh-dotfiles
+sh install.sh</code></pre>
+Лог установки: <code>~/.local/state/shh/install.log</code>.</li>
+<li>Перезагрузитесь и войдите на tty1: sway запустится сам.</li>
+</ol>
+</details>
+<details class="section">
 <summary><h2>Дополнительно</h2></summary>
 <h3>Проверка имён пакетов</h3>
 <pre><code>cd ~/Shh-dotfiles
 sh install.sh --check</code></pre>
-<p>Проверяет, что каждый пакет из списков есть в репозиториях, ничего не ставит. Проверяются все списки дистрибутива, а не только нужные этой машине: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/artix/packages">system/artix/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/void/packages">system/void/packages</a>. Установлены ли пакеты, проверяет <a href="shh.html#doctor">shh doctor</a>.</p>
+<p>Проверяет, что каждый пакет из списков есть в репозиториях, ничего не ставит. Проверяются все списки дистрибутива, а не только нужные этой машине: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/artix/packages">system/artix/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/void/packages">system/void/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/packages">system/kiss/packages</a>. Установлены ли пакеты, проверяет <a href="shh.html#doctor">shh doctor</a>.</p>
 <h3>Как работает скрипт</h3>
 <p>install.sh один для всех дистрибутивов. Он подключает к себе (<code>.</code>, в том же процессе) <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/lib/lib.sh">lib/lib.sh</a> и шаги своего дистрибутива, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system">system/DISTRO/distro.sh</a>.</p>
 <p>Отдельными процессами запускает:</p>
 <ul>
-<li><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a>: тип виртуальной машины или видеокарты;</li>
+<li><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a>: определяет тип VM или выводит список GPU;</li>
 <li><a href="shh.html#config">shh config</a>: что ставить, только при первом запуске;</li>
 <li><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/lib/link.sh">lib/link.sh</a> (<a href="layout.html#link-sh">подробнее</a>): кладёт конфиги в домашнюю папку;</li>
 <li><code>scripts/vpn setup</code>: служба sing-box, если sing-box не выключен в shh config.</li>
 </ul>
-<p>Читает списки (DISTRO = artix или void):</p>
+<p>Читает списки (DISTRO = artix, void или kiss):</p>
 <ul>
 <li><code>system/DISTRO/packages/common.csv</code>: пакеты для любой машины;</li>
-<li><code>system/DISTRO/packages/CARD.csv</code>: драйвер для каждой найденной видеокарты (Artix: amd, intel, nvidia, nvidia-580xx; Void: amd, intel);</li>
+<li><code>system/DISTRO/packages/CARD.csv</code>: драйвер для каждого найденного GPU (Artix: amd, intel, nvidia, nvidia-580xx; Void: amd, intel). На KISS отдельных списков для GPU нет;</li>
 <li><code>system/DISTRO/services.txt</code>: службы, которые запускаются при загрузке;</li>
 <li><code>components/DISTRO_components.txt</code>: части, которые можно выключить в shh config.</li>
 </ul>
@@ -131,10 +144,10 @@ sh install.sh --check</code></pre>
 <li><code>choose_parts</code>: меню shh config при первом запуске;</li>
 <li><code>start_log</code>: копия вывода в <code>~/.local/state/shh/install.log</code> (только последний запуск);</li>
 <li><code>enable_nopasswd</code>: временный sudo без пароля, чтобы сборка из AUR не спрашивала его снова и снова;</li>
-<li><code>distro_prepare</code>: Artix: настройки pacman, репозитории Arch, AUR helper; Void: обновляет xbps и систему;</li>
+<li><code>distro_prepare</code>: Artix: настройки pacman, репозитории Arch, AUR helper; Void: обновляет xbps и систему; KISS: копирует выбранные <a href="components.html#recipes">рецепты</a>, обновляет репозитории и систему;</li>
 <li><code>vmware_clipboard</code>: только в VMware, общий буфер обмена с хостом (Artix; для Void нет пакета). Скрипт: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/vmware-clipboard">scripts/vmware-clipboard</a> → <code>~/.local/bin/vmware-clipboard</code>, запускается вместе с sway;</li>
 <li><code>install_packages</code>: пакеты из списков, кроме выключенных частей;</li>
-<li><code>configure_gpu</code>: настройки, нужные драйверу видеокарты;</li>
+<li><code>configure_gpu</code>: настройки драйвера GPU;</li>
 <li><code>configure_network</code>: iwd, dhcpcd, DNS;</li>
 <li><code>enable_services</code>: services.txt, служба sing-box, группы; выключает лишние консоли: tty3–tty6, на Artix ещё ttyS;</li>
 <li><code>configure_system</code>: оболочка входа, XDG_RUNTIME_DIR, PC speaker, яркость;</li>

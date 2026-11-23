@@ -62,16 +62,17 @@
 </details>
 <details class="section">
 <summary><h2 id="components"><code>components/</code></h2></summary>
-<p><code>artix_components.txt</code>, <code>void_components.txt</code>: части, которые <a href="shh.html#config">shh config</a> может выключить, по одной на строку: имя, пакеты, файлы, сервисы, вкладка, значение по умолчанию. Список: <a href="components.html">Компоненты</a>.</p>
+<p><code>artix_components.txt</code>, <code>void_components.txt</code>, <code>kiss_components.txt</code>: части, которые <a href="shh.html#config">shh config</a> может выключить, по одной на строку: имя, пакеты, файлы, сервисы, вкладка, значение по умолчанию. Список: <a href="components.html">Компоненты</a>.</p>
 </details>
 <details class="section">
 <summary><h2 id="system"><code>system/</code></h2></summary>
-<p>По папке на дистрибутив: <code>artix/</code>, <code>void/</code>. В каждой:</p>
+<p>По папке на дистрибутив: <code>artix/</code>, <code>void/</code>, <code>kiss/</code>. В каждой:</p>
 <ul class="spaced">
 <li><code>distro.sh</code>: то, что делает только этот дистрибутив: пакетный менеджер, сервисы, вход в систему. Функции у всех дистрибутивов одинаковые;</li>
 <li><code>services.txt</code>: сервисы, которые запускаются при загрузке;</li>
-<li><code>packages/</code>: <code>common.csv</code> — пакеты для всех, и по списку на каждый графический драйвер.<br>Artix: amd, intel, nvidia, nvidia-580xx.<br>Void: amd, intel.</li>
+<li><code>packages/</code>: в <code>common.csv</code> — пакеты для всех. На Artix и Void есть ещё списки драйверов GPU.<br>Artix: amd, intel, nvidia, nvidia-580xx.<br>Void: amd, intel.</li>
 </ul>
+<p>На KISS есть ещё <code>system/kiss/repo/</code>: рецепты пакетов из вкладки <a href="components.html#recipes">KISS recipes</a>.</p>
 </details>
 <details class="section">
 <summary><h2 id="config"><code>config/</code></h2></summary>
