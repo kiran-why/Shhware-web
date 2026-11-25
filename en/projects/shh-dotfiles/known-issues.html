@@ -28,6 +28,7 @@
 <summary><h2 id="sway">sway crash log</h2></summary>
 <p>If sway exits with an error, tty1 shows the last five lines of its log. The full log of the last failed session stays here, even after you log in again:</p>
 <pre><code>less ~/.local/state/shh/wm-crash.log</code></pre>
+<p>Run <a href="shh.html#doctor"><code>shh doctor --graphics</code></a>. The first 64 KiB of each session log can identify the renderer of that startup. The last 64 KiB are checked for graphics errors. A Pixman request or a connected display alone cannot explain cursor lag. Kernel messages come from the current boot and may refer to another session.</p>
 </details>
 <details class="section">
 <summary><h2 id="nvidia">NVIDIA</h2></summary>

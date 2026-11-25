@@ -105,7 +105,8 @@ The install log: <code>~/.local/state/shh/install.log</code>.</li>
 <h3>Checking package names</h3>
 <pre><code>cd ~/Shh-dotfiles
 sh install.sh --check</code></pre>
-<p>Checks that every package in the lists exists in the repositories, installs nothing. It checks all lists of the distro, not only this machine's: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/artix/packages">system/artix/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/void/packages">system/void/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/packages">system/kiss/packages</a>. Whether the packages are installed: <a href="shh.html#doctor">shh doctor</a>.</p>
+<p>Checks package names in the selected distro's lists without installing anything. It checks all its lists, including packages not needed on this machine: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/artix/packages">Artix</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/void/packages">Void</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/packages">KISS</a>. To check installed packages, use <a href="shh.html#doctor">shh doctor --config</a>.</p>
+<p>On KISS this check uses local recipes and needs no network. It checks the version, release and executable build script of the first matching recipe. A skipped entry means local data was insufficient and does not by itself change the exit code. A missing or damaged recipe fails the check when local repositories are available. Dependencies and build success are outside this check.</p>
 <h3>How the script works</h3>
 <p>install.sh is the same on every distro. It loads into itself (<code>.</code>, same process) <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/lib/lib.sh">lib/lib.sh</a> and the distro's own steps, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system">system/DISTRO/distro.sh</a>.</p>
 <p>It runs as separate processes:</p>
@@ -138,6 +139,7 @@ sh install.sh --check</code></pre>
 <li>Void: <code>/etc/alsa/conf.d/</code>: ALSA programs play through pipewire.</li>
 </ul>
 <p>It also sets zsh as your login shell and adds you to the groups for seatd, sound and video.</p>
+<p>If publishing a replacement system file fails, the installer tries to restore the original at its old name. If that name is already occupied, the new occupant stays and the error gives the backup path. After a forced kill or power loss, also check for a leftover temporary sudo rule.</p>
 <h3>Steps</h3>
 <ol>
 <li><code>check_system</code>: not root, a supported distro, sudo, the lists, internet;</li>

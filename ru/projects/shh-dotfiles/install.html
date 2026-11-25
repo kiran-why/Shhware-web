@@ -105,7 +105,8 @@ sh install.sh</code></pre>
 <h3>Проверка имён пакетов</h3>
 <pre><code>cd ~/Shh-dotfiles
 sh install.sh --check</code></pre>
-<p>Проверяет, что каждый пакет из списков есть в репозиториях, ничего не ставит. Проверяются все списки дистрибутива, а не только нужные этой машине: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/artix/packages">system/artix/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/void/packages">system/void/packages</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/packages">system/kiss/packages</a>. Установлены ли пакеты, проверяет <a href="shh.html#doctor">shh doctor</a>.</p>
+<p>Проверяет имена пакетов в списках выбранного дистрибутива, ничего не устанавливая. Проверяются все его списки, включая пакеты, не нужные этой машине: <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/artix/packages">Artix</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/void/packages">Void</a>, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/packages">KISS</a>. Установленные пакеты проверяет <a href="shh.html#doctor">shh doctor --config</a>.</p>
+<p>На KISS проверка работает с локальными рецептами без сети. Для первого найденного рецепта проверяются версия, ревизия и исполняемый файл build. Пометка skipped означает недостаток локальных данных и сама по себе не меняет код выхода. Отсутствующий или повреждённый рецепт при доступных локальных репозиториях даёт ошибку. Зависимости и собираемость этим режимом не проверяются.</p>
 <h3>Как работает скрипт</h3>
 <p>install.sh один для всех дистрибутивов. Он подключает к себе (<code>.</code>, в том же процессе) <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/lib/lib.sh">lib/lib.sh</a> и шаги своего дистрибутива, <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system">system/DISTRO/distro.sh</a>.</p>
 <p>Отдельными процессами запускает:</p>
@@ -138,6 +139,7 @@ sh install.sh --check</code></pre>
 <li>Void: <code>/etc/alsa/conf.d/</code>: ALSA-программы играют через pipewire.</li>
 </ul>
 <p>Ещё делает zsh оболочкой входа и добавляет вас в группы для seatd, звука и видео.</p>
+<p>Если установить подготовленный системный файл не удалось, установщик пытается вернуть оригинал под прежним именем. Если имя уже занято, файл по нему сохраняется, а в ошибке указывается путь к резервной копии. После принудительной остановки или потери питания также проверьте, не осталось ли временное правило sudo.</p>
 <h3>Шаги</h3>
 <ol>
 <li><code>check_system</code>: не root, дистрибутив поддерживается, есть sudo, списки, интернет;</li>

@@ -24,7 +24,7 @@
 <main>
 <article>
 <h1>Shh commands</h1>
-<p>The script: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/shh"><code>scripts/shh</code></a> in the repo, installed as <code>~/.local/bin/shh</code>. Run it as your user, <strong>not root</strong>: shh stops when run as root.</p>
+<p>The script: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/shh"><code>scripts/shh</code></a> in the repo, installed as <code>~/.local/bin/shh</code>. Run it as your user, <strong>not root</strong>.</p>
 <details class="section">
 <summary><h2 id="config">shh config</h2></summary>
 <p>A menu: which parts of the system to keep and which to leave out. <a href="install.html">install.sh</a> opens it by itself on the first run, while there is no <code>~/.config/shh/config</code> yet. To change the choices later:</p>
@@ -44,30 +44,49 @@
 <details class="section">
 <summary><h2 id="update">shh update</h2></summary>
 <pre><code>shh update</code></pre>
+<p>Before applying changes, inspect the <a href="#diff">local preview</a>. Switching from copy to link requires running the installer from a persistent checkout.</p>
 <p>Updates the system and the configs: runs <a href="install.html">install.sh</a> from a fresh copy of the repo. Your choices from <a href="#config">shh config</a> stay, the menu does not open again.</p>
 <ul>
 <li>copy mode: clones the repo (<code>git clone --depth 1</code>, only the last commit) into a temporary folder, runs <code>install.sh</code> from it and deletes the folder when it ends;</li>
-<li>link mode: <code>git pull</code> in the repo the links point to, then its <code>install.sh</code>. With local changes in the repo the pull stops (fast-forward only).</li>
+<li>link mode: <code>git pull --ff-only</code> in the repo the links point to, then its <code>install.sh</code>. The update stops if Git cannot fast-forward or would overwrite local edits.</li>
 </ul>
 </details>
 <details class="section">
+<summary><h2 id="diff">shh diff · shh update --dry-run</h2></summary>
+<pre><code>shh diff
+shh update --dry-run</code></pre>
+<p>Use <code>shh diff</code> to see which files would change, where a backup would go and what Sway keyboard settings would be generated. In link mode, edits made through an installed link are already in the checkout.</p>
+<p><code>shh update --dry-run</code> also lists missing packages and KISS recipe changes using local data. Neither preview fetches, installs or writes dotfiles. The remote revision and future dependency changes are unknown. In copy mode the installed CLI looks in <code>~/Shh-dotfiles</code>. For a checkout elsewhere, run <code>sh scripts/shh diff</code> from its root.</p>
+<p>The update preview reports <code>remote state unknown</code>. On the first install, the configuration menu may change the final plan. KISS recipe changes include the executable bit of <code>build</code>, even when its contents match.</p>
+</details>
+<details class="section">
 <summary><h2 id="doctor">shh doctor</h2></summary>
-<pre><code>shh doctor</code></pre>
-<p>Checks that everything the install set up is in place and says what is missing, mostly with the fix (<code>sh install.sh</code> or <code>sh lib/link.sh</code>). It follows your choices in <a href="#config">shh config</a>: a part turned off is not looked for. At the end: the number of problems, or "all good".</p>
-<h3>services</h3>
-<p>Checks the services in <code>services.txt</code> (s6 on Artix, runit on Void and KISS). If a KISS service is down, check its <a href="known-issues.html#kiss">runit log</a>.</p>
-<h3>files</h3>
-<p>Every file <a href="layout.html#link-sh">lib/link.sh</a> put in place (the list: <code>~/.local/state/shh/installed</code>) is still there; a broken link counts as missing.</p>
-<h3>packages</h3>
-<p>Every package from <code>common.csv</code> and from the graphics driver lists (by the card, or as picked in settings: graphics) is installed.</p>
-<h3>session</h3>
-<p>Checks <code>XDG_RUNTIME_DIR</code> and your groups: seat, audio, video on Artix; _seatd, audio, video on Void; audio, video, wheel on KISS. Just added to a group: log out and in again.</p>
+<p>Run <code>shh doctor</code> for help. With <a href="components.html#shh-tools">Shhware Tools</a> enabled, choose one check:</p>
+<ul class="spaced">
+<li><code>shh doctor --config</code> — Check services, files in the installation manifest, selected packages, runtime directory and login groups. An unreadable required list gives UNAVAILABLE and exit code 1.</li>
+<li><code>shh doctor --graphics</code> — Inspect DRM cards, drivers and connectors. Compare the requested renderer with the renderer confirmed in a recorded Sway startup. See <a href="known-issues.html#sway">Sway logs</a>.</li>
+<li><code>shh doctor --performance</code> — Read load, RAM, swap and available CPU sensors. Two process samples about a second apart show desktop CPU time and RSS. The Sway main-loop timestamp measures startup within the log.</li>
+<li><code>shh doctor --build</code> — Check Git, build tools and the working filesystem without building. On KISS, inspect free space and the active job limits for make, samu and Cargo.</li>
+<li><code>shh doctor --network</code> — Inspect interfaces, Wi-Fi association, main-table routes and local DNS settings. External IP, DNS resolution and HTTPS remain NOT TESTED. Local client queries get up to two seconds each within a shared six-second budget.</li>
+<li><code>shh doctor --audio</code> — Check user audio processes, socket listeners, the local server, routing and ALSA. A socket can outlive its server. Playback and physical connections remain NOT TESTED.</li>
+</ul>
+<p>Exit code 0 means help was shown or no required check reported a problem. Warnings and gaps in the evidence are possible. UNKNOWN means inconclusive, UNAVAILABLE means the source could not be used, and NOT TESTED marks a skipped probe. Exit code 1 means a counted problem or execution error; 2 means invalid arguments.</p>
+<h3>Reading the results</h3>
+<p>Graphics reports PCI IDs, bound drivers, connector status and direct access to <code>/dev/dri/*</code>. A connected display does not identify the rendering GPU. <code>requested (this shell)</code> describes this shell. For each Sway log, <code>actual</code> is shown only when startup evidence confirms Pixman or GLES2; <code>actual=unknown</code> means there is too little evidence. Error matches cover the last 64 KiB of each log and the last 256 lines of the current boot's kernel log, up to six matches per source.</p>
+<p>Performance includes load averages, memory PSI when available, sensor names and CPU frequency policies. Desktop CPU time is the increase between samples in seconds. Network reads local state without scanning Wi-Fi or contacting external services. A missing default route in the main table does not exclude other routing. Audio checks standard Shhware sockets and can show outputs, default devices and volume through <code>wpctl</code> or <code>pactl</code>. A device listing does not confirm audible playback.</p>
+</details>
+<details class="section">
+<summary><h2 id="report">shh report</h2></summary>
+<pre><code>shh report &gt; shh-report.txt</code></pre>
+<p>Save a local summary for a bug report. Its eight sections cover the system, hardware, configuration, graphics, performance, build tools, network and audio. The shell creates the file. Shhware does not upload it.</p>
+<p>Read the file before sharing. Personal paths, network addresses, Wi-Fi names and raw log lines are filtered, but hardware and version combinations can still identify a machine. Exit code 0 means the report was printed, even if a section says FAIL.</p>
+<p>The report summarizes local observations. It skips active network and audio probes. A visible process does not prove its server responds, and an old log error does not establish the cause of a current failure. Review the entire report before posting it to a public issue.</p>
 </details>
 <details class="section">
 <summary><h2 id="uninstall">shh uninstall</h2></summary>
 <pre><code>shh uninstall
 shh uninstall -n</code></pre>
-<p>Removes what <a href="layout.html#link-sh">lib/link.sh</a> put in place (configs, scripts, shh itself, <code>~/.local/share/shh</code>) and puts your old files back from <code>NAME.bak-DATE</code> (the oldest one, from before the dotfiles). A file you changed since the install is kept, with a warning. Folders left empty are removed. <code>-n</code>: only shows what would be done, changes nothing.</p>
+<p>Preview with <code>shh uninstall -n</code>. Removal checks each manifest entry against its saved checksum or link target. Changed files stay in place. Recorded backups can be restored, and only empty directories created by the installer are pruned. Older unrecorded backups remain for manual recovery.</p>
 <h3>What stays</h3>
 <p>Packages, services, the login shell (zsh), the groups and the system files in <code>/etc</code><span class="star">*<span class="visually-hidden"> (important)</span></span>: undoing them by mistake breaks the login (without seatd sway does not start). shh uninstall prints a list of them with the commands to undo by hand only what you need. Also stays: <code>~/.config/shh/config</code> and the repo folder, if you kept it.</p>
 </details>

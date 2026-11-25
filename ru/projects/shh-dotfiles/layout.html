@@ -33,8 +33,11 @@
 <summary><h2 id="lib"><code>lib/</code></h2></summary>
 <h3><code>lib.sh</code></h3>
 <p>Общий код install.sh, link.sh и shh: цвета, сообщения, списки, лого. Сам по себе не запускается.</p>
+<h3><code>diagnostics.sh</code></h3>
+<p>Необязательный модуль <a href="components.html#shh-tools">Shhware Tools</a> в <code>~/.local/share/shh/</code>. Команды config, help, diff и update остаются в основном CLI.</p>
 <h3 id="link-sh"><code>link.sh</code></h3>
 <p>Кладёт репозиторий в домашнюю папку, файл за файлом: копиями, а в режиме link — ссылками на репозиторий. Чужой файл переносится в <code>NAME.bak-ДАТА</code>, никогда не удаляется. Что наше — список в <code>~/.local/state/shh/installed</code>.</p>
+<p>Соседний файл <code>backups</code> хранит имена резервных копий и созданных установщиком каталогов. Блокировка <code>.link-lock</code> останавливает и предпросмотр, и применение. После прерывания проверьте, продолжается ли операция, и осмотрите список установки, резервные копии и соседние каталоги <code>.shh-install.*</code>.</p>
 <table>
 <thead>
 <tr><th>Репозиторий</th><th>Куда ставится</th></tr>

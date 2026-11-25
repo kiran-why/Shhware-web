@@ -35,20 +35,22 @@
 <li><code>layouts</code>: keyboard layouts, the first one is the main one. Default: us,ru.</li>
 <li><code>switch layout</code>: the keys that switch the layout: Alt+Shift (default), Ctrl+Shift, Super+Space, Caps Lock, Left Alt+Left Shift.</li>
 <li><code>dns</code>: DHCP (default), Cloudflare, Quad9, Google.<br>Any other: by hand in <code>~/.config/shh/config</code>.</li>
-<li><code>graphics</code>: auto (default) or by hand: AMD, Intel, NVIDIA, Nouveau.<br>auto: the drivers for the cards <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a> finds.<br>NVIDIA and Nouveau can't be picked together.</li>
+<li><code>graphics</code>: auto (default) or by hand: AMD, Intel, NVIDIA, Nouveau.<br>auto: the drivers for the cards <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a> finds.<br>NVIDIA and Nouveau can't be picked together. Clearing the last selection saves <code>gpu=none</code>. The running kernel keeps its loaded driver.</li>
 <li><code>editor</code>: Vim (default) or Neovim.<br>Files:<br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/vim">config/vim</a> → <code>~/.config/vim</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/nvim">config/nvim</a> → <code>~/.config/nvim</code></li>
 <li><code>file manager</code>: Broot (default) or Yazi, opens on Super+F.<br>Files:<br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/broot">config/broot</a> → <code>~/.config/broot</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/broot">config/sway/features/broot</a> → <code>~/.config/sway/features/broot</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/yazi">config/yazi</a> → <code>~/.config/yazi</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/yazi">config/sway/features/yazi</a> → <code>~/.config/sway/features/yazi</code></li>
 <li><code>aur helper</code>, Artix only: yay (default) or paru.</li>
 <li><code>pacman</code>, Artix only: colors, parallel downloads, AUR builds on all CPU cores. On by default.</li>
 <li><code>nobeep</code>: mutes the motherboard beeper. On by default.</li>
 <li><code>maxhz</code>: every screen at its highest refresh rate, also one plugged in later. On by default.<br>Files:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/maxhz">scripts/maxhz</a> → <code>~/.local/bin/maxhz</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/maxhz">config/sway/features/maxhz</a> → <code>~/.config/sway/features/maxhz</code></li>
-<li><code>xwayland</code>: X11 programs, after a relogin. Off by default.<br>Off: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>On: Artix installs xorg-xwayland; on Void it is always installed, sway needs it. On KISS the switch has no effect: wlroots and sway are built without Xwayland.</li>
+<li><code>xwayland</code>: X11 programs, after a relogin. Off by default.<br>Off: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>On: Artix installs xorg-xwayland; on Void it is always installed, sway needs it. On KISS, enabling it requires an Xwayland server and compatible builds of wlroots and Sway. Changing this setting does not rebuild them.</li>
 <li><code>a11y</code>: screen readers in GTK programs, after a relogin. Off by default.</li>
 </ul>
 </details>
 <details class="section">
 <summary><h2 id="features">Features</h2></summary>
 <p>Scripts and sway settings that make the system easier to use. All on by default. Each one keeps its sway lines in its own file in <code>config/sway/features/</code>.</p>
+<h3 id="shh-tools">Shhware Tools</h3>
+<p>System diagnostics and reports. Enabled by default, including for older configs without <code>shh_tools</code>. Turning it off immediately disables <a href="shh.html#doctor">doctor</a> and <a href="shh.html#report">report</a> (exit 1). Use <code>shh diff</code> to preview removal of the installed module, then apply with <code>shh update</code>. Edited copies and saved reports stay. To restore the tools, enable the feature and update again.</p>
 <h3 id="fastfetch"><code>fastfetch</code></h3>
 <p>System info in every new foot window: our logo on the left, a box with OS, kernel, CPU, GPU, RAM, disk and more on the right.</p>
 <p>To change the logo: put your file in <code>~/.config/fastfetch/logos/</code> and write its path in <code>"source"</code> in <code>~/.config/fastfetch/config.jsonc</code>. No <code>$</code> in the logo: fastfetch reads <code>$1</code>…<code>$9</code> as colors. In copy mode the next shh update puts the original <code>config.jsonc</code> back, yours stays next to it as <code>config.jsonc.bak-DATE</code>.</p>
@@ -141,7 +143,8 @@
 <details class="section">
 <summary><h2 id="recipes">KISS recipes</h2></summary>
 <p>Only on KISS. Turn off <code>bash</code> here to skip the package at install time.</p>
-<p><code>All recipes</code> lists the recipes from <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/repo">system/kiss/repo</a> with their versions. Enter turns a recipe off or on. Off: the next build uses the community recipe if there is one. The installed package stays as it is.</p>
+<p><code>All recipes</code> selects which project recipes enter the KISS overlay. Disabling one keeps the installed package. The next build looks for the first matching directory in the remaining <code>KISS_PATH</code>. An incomplete recipe there can hide a valid one further down the path.</p>
+<p>Open <code>Recipes → Preview</code> to compare the active overlay with your selection. A possible rebuild is an estimate. On apply, Shhware validates the staged recipes and prints the location of the previous overlay, including manual edits, under <code>.shh-recipes.*/previous</code>.</p>
 </details>
 </article>
 </main>

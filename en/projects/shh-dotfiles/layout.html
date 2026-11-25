@@ -33,8 +33,11 @@
 <summary><h2 id="lib"><code>lib/</code></h2></summary>
 <h3><code>lib.sh</code></h3>
 <p>Shared code of install.sh, link.sh and shh: colors, messages, lists, the logo. Not run on its own.</p>
+<h3><code>diagnostics.sh</code></h3>
+<p>Optional module for <a href="components.html#shh-tools">Shhware Tools</a>, installed in <code>~/.local/share/shh/</code>. The main CLI provides config, help, diff and update independently.</p>
 <h3 id="link-sh"><code>link.sh</code></h3>
 <p>Puts the repo into your home folder, file by file: copies, or links to the repo in link mode. A file that is not ours is moved to <code>NAME.bak-DATE</code>, never deleted. What is ours: the list in <code>~/.local/state/shh/installed</code>.</p>
+<p>The adjacent <code>backups</code> file records backup names and directories created by the installer. A pending <code>.link-lock</code> blocks both preview and apply. After an interruption, check for a running operation and inspect the manifest, backups and adjacent <code>.shh-install.*</code> directories before recovery.</p>
 <table>
 <thead>
 <tr><th>Repo</th><th>Installed to</th></tr>

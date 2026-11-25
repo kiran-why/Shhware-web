@@ -35,20 +35,22 @@
 <li><code>layouts</code>: раскладки клавиатуры, первая — основная. По умолчанию: us,ru.</li>
 <li><code>switch layout</code>: клавиши переключения раскладки: Alt+Shift (по умолчанию), Ctrl+Shift, Super+Space, Caps Lock, левый Alt+левый Shift.</li>
 <li><code>dns</code>: DHCP (по умолчанию), Cloudflare, Quad9, Google.<br>Любой другой: вручную в <code>~/.config/shh/config</code>.</li>
-<li><code>graphics</code>: auto (по умолчанию) или вручную: AMD, Intel, NVIDIA, Nouveau.<br>auto: драйверы для GPU, которые находит <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a>.<br>NVIDIA и Nouveau вместе выбрать нельзя.</li>
+<li><code>graphics</code>: auto (по умолчанию) или вручную: AMD, Intel, NVIDIA, Nouveau.<br>auto: драйверы для GPU, которые находит <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/hardware">scripts/hardware</a>.<br>NVIDIA и Nouveau вместе выбрать нельзя. Если снять последнюю галочку, сохранится <code>gpu=none</code>. Загруженный драйвер останется в работающем ядре.</li>
 <li><code>editor</code>: Vim (по умолчанию) или Neovim.<br>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/vim">config/vim</a> → <code>~/.config/vim</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/nvim">config/nvim</a> → <code>~/.config/nvim</code></li>
 <li><code>file manager</code>: Broot (по умолчанию) или Yazi, открывается на Super+F.<br>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/broot">config/broot</a> → <code>~/.config/broot</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/broot">config/sway/features/broot</a> → <code>~/.config/sway/features/broot</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/config/yazi">config/yazi</a> → <code>~/.config/yazi</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/yazi">config/sway/features/yazi</a> → <code>~/.config/sway/features/yazi</code></li>
 <li><code>aur helper</code>, только Artix: yay (по умолчанию) или paru.</li>
 <li><code>pacman</code>, только Artix: цвета, параллельные загрузки, сборка из AUR на всех ядрах. По умолчанию вкл.</li>
 <li><code>nobeep</code>: выключает пищалку материнской платы. По умолчанию вкл.</li>
 <li><code>maxhz</code>: каждый экран на максимальной частоте обновления, и экран, подключённый позже. По умолчанию вкл.<br>Файлы:<br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/maxhz">scripts/maxhz</a> → <code>~/.local/bin/maxhz</code><br><a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/maxhz">config/sway/features/maxhz</a> → <code>~/.config/sway/features/maxhz</code></li>
-<li><code>xwayland</code>: программы для X11, после перезахода. По умолчанию выкл.<br>Выкл.: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>Вкл.: на Artix ставится xorg-xwayland; на Void он стоит всегда, он нужен sway. На KISS переключатель ничего не меняет: wlroots и sway собраны без Xwayland.</li>
+<li><code>xwayland</code>: программы для X11, после перезахода. По умолчанию выкл.<br>Выкл.: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/config/sway/features/noxwayland">config/sway/features/noxwayland</a> → <code>~/.config/sway/features/noxwayland</code><br>Вкл.: на Artix ставится xorg-xwayland; на Void он стоит всегда, он нужен sway. На KISS для Xwayland нужны сервер и совместимые сборки wlroots и Sway. Изменение настройки не пересобирает пакеты.</li>
 <li><code>a11y</code>: скринридеры в программах GTK, после перезахода. По умолчанию выкл.</li>
 </ul>
 </details>
 <details class="section">
 <summary><h2 id="features">Features</h2></summary>
 <p>Скрипты и настройки sway, которые упрощают работу с системой. По умолчанию все включены. Строки sway каждой фичи лежат в её собственном файле в <code>config/sway/features/</code>.</p>
+<h3 id="shh-tools">Shhware Tools</h3>
+<p>Системная диагностика и отчёты. Компонент включён по умолчанию, в том числе в старых конфигурациях без ключа <code>shh_tools</code>. После отключения <a href="shh.html#doctor">doctor</a> и <a href="shh.html#report">report</a> сразу возвращают код 1. Посмотрите план удаления модуля через <code>shh diff</code> и примените его через <code>shh update</code>. Изменённые копии и сохранённые отчёты остаются. Чтобы вернуть диагностику, включите компонент и повторите обновление.</p>
 <h3 id="fastfetch"><code>fastfetch</code></h3>
 <p>Информация о системе в каждом новом окне foot: слева наше лого, справа — OS, kernel, CPU, GPU, RAM и диск.</p>
 <p>Чтобы поменять лого: положите свой файл в <code>~/.config/fastfetch/logos/</code> и впишите путь к нему в <code>"source"</code> в <code>~/.config/fastfetch/config.jsonc</code>. Без <code>$</code> в лого: fastfetch читает <code>$1</code>…<code>$9</code> как цвета. В режиме copy следующий shh update вернёт исходный <code>config.jsonc</code>, ваш останется рядом как <code>config.jsonc.bak-ДАТА</code>.</p>
@@ -141,7 +143,8 @@
 <details class="section">
 <summary><h2 id="recipes">KISS recipes</h2></summary>
 <p>Только на KISS. Если выключить <code>bash</code>, установщик пропустит этот пакет.</p>
-<p><code>All recipes</code> показывает рецепты из <a href="https://github.com/kiran-why/Shh-dotfiles/tree/main/system/kiss/repo">system/kiss/repo</a> и их версии. Enter выключает или включает рецепт. Выкл.: при следующей сборке KISS возьмёт рецепт сообщества, если он есть. Уже установленный пакет не меняется.</p>
+<p>В <code>All recipes</code> выбираются рецепты проекта для overlay KISS. При отключении рецепта установленный пакет остаётся. Для следующей сборки важен первый подходящий каталог в оставшемся <code>KISS_PATH</code>. Неполный рецепт в нём может скрыть исправный рецепт дальше по пути.</p>
+<p>Откройте <code>Recipes → Preview</code>, чтобы сравнить действующий overlay с новым выбором. Возможная пересборка — оценка. При применении Shhware проверяет подготовленные рецепты и выводит путь к предыдущему набору с ручными правками в <code>.shh-recipes.*/previous</code>.</p>
 </details>
 </article>
 </main>
