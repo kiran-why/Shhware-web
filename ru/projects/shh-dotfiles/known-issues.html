@@ -29,14 +29,11 @@
 <p>Если sway завершился с ошибкой, на tty1 появятся последние пять строк лога. Полный лог последнего падения сохраняется и после следующего входа:</p>
 <pre><code>less ~/.local/state/shh/wm-crash.log</code></pre>
 <p>Запустите <a href="shh.html#doctor"><code>shh doctor --graphics</code></a>. По первым 64 КиБ каждого журнала можно определить рендерер записанного запуска. В последних 64 КиБ проверяются ошибки графики. Одного запроса Pixman или подключённого экрана недостаточно, чтобы установить причину задержек курсора. Сообщения ядра относятся к текущей загрузке и могут описывать другую сессию.</p>
+<p>Если выбранный GPU недоступен, профиль TTY1 повторяет поиск до трёх секунд. Если определить узел рендеринга или порядок DRM-карт не удалось, запуск прерывается и вы остаётесь в консоли. Посмотрите журнал выше, затем откройте <code>shh config → Settings → Graphics → Render device</code> и выберите Auto или доступный GPU для следующего входа.</p>
 </details>
 <details class="section">
 <summary><h2 id="nvidia">NVIDIA</h2></summary>
-<ul class="spaced">
-<li>На GPU NVIDIA не проверялось. GTX 6xx / 7xx и более старые работают на nouveau.</li>
-<li>Чёрный экран после загрузки: уберите <code>kms</code> из <code>HOOKS</code> в <code>/etc/mkinitcpio.conf</code>, затем:
-<pre><code>sudo mkinitcpio -P</code></pre></li>
-</ul>
+<p>При обнаружении NVIDIA профиль TTY1 включает соответствующий параметр запуска Sway. Доступность драйвера зависит от дистрибутива и GPU. При чёрном экране сначала проверьте журнал запуска и <a href="components.html#graphics">настройки Graphics</a>.</p>
 </details>
 <details class="section">
 <summary><h2 id="void">Void Linux</h2></summary>

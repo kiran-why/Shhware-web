@@ -30,11 +30,15 @@
 <p>Sets up a fresh system: packages, drivers, services, system files, the dotfiles. Safe to run again. What differs per distro is in <a href="#system">system/</a>. The steps: <a href="install.html">Install</a>.</p>
 </details>
 <details class="section">
+<summary><h2 id="tools"><code>tools/</code></h2></summary>
+<p><code>tools/shh</code> dispatches commands. The base CLI loads <code>tui.sh</code> for menus and lowercase banners, <code>config.sh</code> for settings, <code>components.sh</code> for component selection and <code>update.sh</code> for updates and previews.</p>
+<p><a href="components.html#shh-tools">Shhware Tools</a> adds two modules. Doctor and Report share <code>diagnostics.sh</code>. Debloater uses <code>debloater.sh</code> with package queries from <code>system/DISTRO/distro.sh</code>.</p>
+<p>The checkout retains three compatibility symlinks for older link-mode installations: <code>scripts/shh</code>, <code>lib/diagnostics.sh</code> and <code>lib/debloater.sh</code>. They keep the old targets usable between updating the checkout and applying the installation.</p>
+</details>
+<details class="section">
 <summary><h2 id="lib"><code>lib/</code></h2></summary>
 <h3><code>lib.sh</code></h3>
 <p>Shared code of install.sh, link.sh and shh: colors, messages, lists, the logo. Not run on its own.</p>
-<h3><code>diagnostics.sh</code></h3>
-<p>Optional module for <a href="components.html#shh-tools">Shhware Tools</a>, installed in <code>~/.local/share/shh/</code>. The main CLI provides config, help, diff and update independently.</p>
 <h3 id="link-sh"><code>link.sh</code></h3>
 <p>Puts the repo into your home folder, file by file: copies, or links to the repo in link mode. A file that is not ours is moved to <code>NAME.bak-DATE</code>, never deleted. What is ours: the list in <code>~/.local/state/shh/installed</code>.</p>
 <p>The adjacent <code>backups</code> file records backup names and directories created by the installer. A pending <code>.link-lock</code> blocks both preview and apply. After an interruption, check for a running operation and inspect the manifest, backups and adjacent <code>.shh-install.*</code> directories before recovery.</p>
@@ -45,9 +49,11 @@
 <tbody>
 <tr><td><code>config/</code></td><td><code>~/.config/</code></td></tr>
 <tr><td><code>home/</code></td><td><code>~/</code></td></tr>
+<tr><td><code>tools/shh</code></td><td><code>~/.local/bin/shh</code></td></tr>
+<tr><td><code>tools/*.sh</code></td><td><code>~/.local/share/shh/tools/</code></td></tr>
 <tr><td><code>scripts/</code></td><td><code>~/.local/bin/</code></td></tr>
 <tr><td><code>wallpapers/</code></td><td><code>~/wallpapers/</code></td></tr>
-<tr><td><code>lib/*.sh</code>, <code>system/DISTRO/</code>, <code>components/DISTRO_components.txt</code></td><td><code>~/.local/share/shh/</code></td></tr>
+<tr><td><code>lib/lib.sh</code>, <code>lib/link.sh</code>, <code>system/DISTRO/</code>, <code>components/DISTRO_components.txt</code></td><td><code>~/.local/share/shh/</code></td></tr>
 </tbody>
 </table>
 <p>install.sh and shh run it for you. By hand:</p>
@@ -61,7 +67,7 @@
 </details>
 <details class="section">
 <summary><h2 id="scripts"><code>scripts/</code></h2></summary>
-<p>The menus and tools, 22 shell scripts, and <a href="shh.html">shh</a> among them. Installed to <code>~/.local/bin/</code>. What each does: <a href="environment.html">Environment</a>.</p>
+<p>Standalone helpers and desktop menus are installed in <code>~/.local/bin/</code>. See <a href="environment.html">Environment</a>.</p>
 </details>
 <details class="section">
 <summary><h2 id="components"><code>components/</code></h2></summary>

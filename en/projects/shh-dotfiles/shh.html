@@ -24,12 +24,13 @@
 <main>
 <article>
 <h1>Shh commands</h1>
-<p>The script: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/scripts/shh"><code>scripts/shh</code></a> in the repo, installed as <code>~/.local/bin/shh</code>. Run it as your user, <strong>not root</strong>.</p>
+<p>The script: <a href="https://github.com/kiran-why/Shh-dotfiles/blob/main/tools/shh"><code>tools/shh</code></a> in the repo, installed as <code>~/.local/bin/shh</code>. Run it as your user, <strong>not root</strong>.</p>
 <details class="section">
 <summary><h2 id="config">shh config</h2></summary>
 <p>A menu: which parts of the system to keep and which to leave out. <a href="install.html">install.sh</a> opens it by itself on the first run, while there is no <code>~/.config/shh/config</code> yet. To change the choices later:</p>
 <pre><code>shh config</code></pre>
-<p>Every change is saved at once and applied by the next <a href="#update">shh update</a> (before the first install: <code>sh install.sh</code>). A part turned off: its packages, files and services are not installed.</p>
+<p>Changes are saved immediately. Apply changes to installed files and packages with <a href="#update">shh update</a> (on the first install, run <code>sh install.sh</code>). Renderer and render device take effect at the next managed Sway startup.</p>
+<p>Config and Debloater share an fzf interface with lowercase ASCII headings and aligned values. In mixed menus, choices and submenus come first, then a blank row and the checkboxes. Enter opens a choice or toggles a checkbox; Esc goes back.</p>
 <h3>settings: install options</h3>
 <p>Install options: <a href="components.html#settings">Components: settings</a>.</p>
 <h3>features: environment tools</h3>
@@ -56,7 +57,7 @@
 <pre><code>shh diff
 shh update --dry-run</code></pre>
 <p>Use <code>shh diff</code> to see which files would change, where a backup would go and what Sway keyboard settings would be generated. In link mode, edits made through an installed link are already in the checkout.</p>
-<p><code>shh update --dry-run</code> also lists missing packages and KISS recipe changes using local data. Neither preview fetches, installs or writes dotfiles. The remote revision and future dependency changes are unknown. In copy mode the installed CLI looks in <code>~/Shh-dotfiles</code>. For a checkout elsewhere, run <code>sh scripts/shh diff</code> from its root.</p>
+<p><code>shh update --dry-run</code> also lists missing packages and KISS recipe changes using local data. Neither preview fetches, installs or writes dotfiles. The remote revision and future dependency changes are unknown. In copy mode the installed CLI looks in <code>~/Shh-dotfiles</code>. For a checkout elsewhere, run <code>sh tools/shh diff</code> from its root.</p>
 <p>The update preview reports <code>remote state unknown</code>. On the first install, the configuration menu may change the final plan. KISS recipe changes include the executable bit of <code>build</code>, even when its contents match.</p>
 </details>
 <details class="section">
@@ -71,16 +72,39 @@ shh update --dry-run</code></pre>
 <li><code>shh doctor --audio</code> — Check user audio processes, socket listeners, the local server, routing and ALSA. A socket can outlive its server. Playback and physical connections remain NOT TESTED.</li>
 </ul>
 <p>Exit code 0 means help was shown or no required check reported a problem. Warnings and gaps in the evidence are possible. UNKNOWN means inconclusive, UNAVAILABLE means the source could not be used, and NOT TESTED marks a skipped probe. Exit code 1 means a counted problem or execution error; 2 means invalid arguments.</p>
+<h3 id="online">Online network checks</h3>
+<pre><code>shh doctor --network --online</code></pre>
+<p>The default network check is offline. Adding <code>--online</code> runs four independent probes after the local snapshot. Neither mode changes network settings.</p>
+<ul class="spaced">
+<li><code>ip -4 route get 1.1.1.1</code> asks the kernel for the route to Cloudflare’s IPv4 address (2 s). This lookup sends no packet.</li>
+<li><code>ping -n -c 1 1.1.1.1</code> waits up to 2 s for one ICMP reply. A host or firewall can drop ICMP even when internet access works.</li>
+<li><code>nslookup example.com.</code> asks the configured resolver for an address (3 s). An address in the answer confirms resolution.</li>
+<li><code>curl</code> sends an HTTPS HEAD request to <code>https://example.com/</code> using its proxy environment. The connection limit is 3 s, the request limit 5 s and the outer timeout 6 s. HTTP 2xx gives OK; other responses, proxy errors, TLS failures and timeouts give WARN.</li>
+</ul>
+<p>WARN describes that probe and does not by itself change the exit code. A missing probe tool, <code>timeout</code> or <code>setsid</code> gives NOT TESTED. Each result applies to the tested address, resolver or resource.</p>
 <h3>Reading the results</h3>
 <p>Graphics reports PCI IDs, bound drivers, connector status and direct access to <code>/dev/dri/*</code>. A connected display does not identify the rendering GPU. <code>requested (this shell)</code> describes this shell. For each Sway log, <code>actual</code> is shown only when startup evidence confirms Pixman or GLES2; <code>actual=unknown</code> means there is too little evidence. Error matches cover the last 64 KiB of each log and the last 256 lines of the current boot's kernel log, up to six matches per source.</p>
-<p>Performance includes load averages, memory PSI when available, sensor names and CPU frequency policies. Desktop CPU time is the increase between samples in seconds. Network reads local state without scanning Wi-Fi or contacting external services. A missing default route in the main table does not exclude other routing. Audio checks standard Shhware sockets and can show outputs, default devices and volume through <code>wpctl</code> or <code>pactl</code>. A device listing does not confirm audible playback.</p>
+<p>Performance includes load averages, memory PSI when available, sensor names and CPU frequency policies. Desktop CPU time is the increase between samples in seconds. Without <code>--online</code>, Network reads local state without scanning Wi-Fi or contacting external services. A missing default route in the main table does not exclude other routing. Audio checks standard Shhware sockets and can show outputs, default devices and volume through <code>wpctl</code> or <code>pactl</code>. A device listing does not confirm audible playback.</p>
 </details>
 <details class="section">
 <summary><h2 id="report">shh report</h2></summary>
 <pre><code>shh report &gt; shh-report.txt</code></pre>
 <p>Save a local summary for a bug report. Its eight sections cover the system, hardware, configuration, graphics, performance, build tools, network and audio. The shell creates the file. Shhware does not upload it.</p>
 <p>Read the file before sharing. Personal paths, network addresses, Wi-Fi names and raw log lines are filtered, but hardware and version combinations can still identify a machine. Exit code 0 means the report was printed, even if a section says FAIL.</p>
-<p>The report summarizes local observations. It skips active network and audio probes. A visible process does not prove its server responds, and an old log error does not establish the cause of a current failure. Review the entire report before posting it to a public issue.</p>
+<p>The report summarizes local observations. It makes no external requests and skips active audio probes. A visible process does not prove its server responds, and an old log error does not establish the cause of a current failure.</p>
+</details>
+<details class="section">
+<summary><h2 id="debloater">shh debloater</h2></summary>
+<p>Part of <a href="components.html#shh-tools">Shhware Tools</a>, Debloater inspects local package metadata and files for candidates worth reviewing. It analyzes and previews a plan. It never removes packages or files and has no quarantine.</p>
+<p>Run <code>shh debloater</code> in a terminal with fzf. Check the categories to include, choose <strong>Scan system</strong>, then <strong>Review candidates</strong>. Open a card for the reason, size, known package owner and risk. Add individual candidates to <strong>Preview plan</strong>. Selection starts empty and lasts only for this session.</p>
+<ul class="spaced">
+<li><code>--scan</code> checks five categories: orphan package candidates, same-name executables, package caches, build leftovers and unresolved symlinks in <code>~/.local/bin</code>. Duplicate results show PATH precedence; copies, links and shadowed programs can still be useful. Cache entries may be recovery archives or active downloads.</li>
+<li><code>--packages</code>, <code>--duplicates</code> and <code>--cache</code> run just the named scan. Pass one option per invocation, for example <code>shh debloater --packages</code>.</li>
+<li>The menu also offers Firefox/mpv cache directories when the corresponding package is absent, restore copies listed in the Shhware backup ledger, and files of at least 100 MiB under Downloads or the application cache. Age and size alone do not establish that a file is unused.</li>
+<li><code>--dry-run</code> opens the default scan for interactive selection and prints the preview. Outside a terminal it reports an empty selection. <code>--history</code> reads existing cleanup history; this version writes no cleanup entries. <code>--help</code> lists the options.</li>
+</ul>
+<p>On Artix, pacman identifies orphan dependencies; on Void, XBPS supplies its orphan list. Both can preview the native package transaction. Build leftovers show NOT TESTED on these distributions. On KISS, a leaf package can be an application you use directly. KISS inspects its build tree for possible active work and has no complete native removal preview, so package plans are blocked.</p>
+<p>Protection covers base packages, toolchains, Shhware package lists, enabled components and package-manager protection. Add your own package names to <code>debloater_protected=name1,name2</code> in <code>~/.config/shh/config</code>. Incomplete protection data or an unverified transaction blocks the package plan. Files are for review only. UNKNOWN marks missing evidence. Exit codes: 0 for completion, 1 for an error or partial command-line scan, 2 for invalid arguments.</p>
 </details>
 <details class="section">
 <summary><h2 id="uninstall">shh uninstall</h2></summary>

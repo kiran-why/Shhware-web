@@ -102,6 +102,11 @@ The install log: <code>~/.local/state/shh/install.log</code>.</li>
 </ol>
 </details>
 <details class="section">
+<summary><h2 id="migration">Updating an existing installation</h2></summary>
+<p>Use <code>shh diff</code> to inspect local changes, including backups of edited profiles. The normal <code>shh update</code> migrates both copy and link installations. Copy mode installs from a temporary checkout; link mode keeps the existing checkout. Your command is still <code>shh</code>, and your choices stay in <code>~/.config/shh/config</code>.</p>
+<p>The installer places the selected modules first, switches the CLI entry point, then compares obsolete files with the installation manifest. It removes matching managed copies or links and restores recorded backups where possible. Edited obsolete files stay in place with a notice. If the update is interrupted, inspect the manifest and backups before retrying. See <a href="layout.html#link-sh">installed paths and state files</a>.</p>
+</details>
+<details class="section">
 <summary><h2>Additional info</h2></summary>
 <h3>Checking package names</h3>
 <pre><code>cd ~/Shh-dotfiles
